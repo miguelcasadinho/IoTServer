@@ -1,4 +1,10 @@
-// Import the dgram module
+import { config } from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+// Load environment variables from the .env file
+config({ path: resolve(dirname(fileURLToPath(import.meta.url)), '.env') });
+
 import dgram from 'dgram';
 import { mqttPublish } from './mqtt.js';
 
@@ -7,7 +13,8 @@ const server = dgram.createSocket('udp4');
 
 // Handle incoming messages
 server.on('message', (msg, rinfo) => {
-  console.log(`Server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
+  let message = msg.toString('hex');
+  console.log(`Server got: ${message} from ${rinfo.address}:${rinfo.port}`);
   //console.log(msg.toString('hex'));
   mqttPublish(msg);
 
@@ -26,6 +33,6 @@ server.on('error', (err) => {
 });
 
 // Bind the server to a port
-const PORT = 38560;
-const HOST = '206.189.116.138';
+const PORT = process.env.udpIotserverPort;
+const HOST = process.env.udpIotserverAddr;
 server.bind(PORT, HOST);
