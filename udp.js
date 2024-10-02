@@ -23,7 +23,7 @@ server.on('message', (msg, rinfo) => {
 // Handle server listening event
 server.on('listening', () => {
   const address = server.address();
-  console.log(`Server listening on ${address.address}:${address.port}`);
+  console.log(`Server listening on UDP`)//${address.address}:${address.port}`);
 });
 
 // Handle any errors
